@@ -6,6 +6,24 @@ sprites.src = './sprites.png';
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
 
+const getReady = {
+  spriteX: 134,
+  spriteY: 0,
+  width: 174,
+  height: 152,
+  positionX: (canvas.width / 2) - 174 / 2,
+  positionY: 50,
+  draw() {
+    context.drawImage(
+      sprites,
+      this.spriteX, this.spriteY,
+      this.width, this.height,
+      this.positionX, this.positionY,
+      this.width, this.height
+    );
+  }
+};
+
 const background = {
   spriteX: 390,
   spriteY: 0,
@@ -68,8 +86,8 @@ const flappyBird = {
   height: 24,
   positionX: 10,
   positionY: 50,
+  gravity: 0.25,
   speed: 0,
-  gravity: 0.2,
   update() {
     this.speed += this.gravity;
     this.positionY += this.speed;
@@ -85,14 +103,48 @@ const flappyBird = {
   }
 };
 
-function loop() {
-  background.draw();
-  floor.draw();
-  flappyBird.draw();
+let activeScreen = {};
 
-  flappyBird.update();
+function changeToScreen(newScreen) {
+  activeScreen = newScreen;
+}
+
+const Screens = {
+  MAIN: {
+    draw() {
+      background.draw();
+      floor.draw();
+      flappyBird.draw();
+      getReady.draw();
+    },
+    click() {
+      changeToScreen(Screens.GAME);
+    },
+    update() {}
+  }
+};
+
+Screens.GAME = {
+  draw() {
+    background.draw();
+    floor.draw();
+    flappyBird.draw();
+  },
+  update() {
+    flappyBird.update();
+  }
+};
+
+function loop() {
+  activeScreen.draw();
+  activeScreen.update();
 
   requestAnimationFrame(loop);
 }
 
+window.addEventListener('click', () => {
+  activeScreen.click && activeScreen.click();
+});
+
+changeToScreen(Screens.MAIN);
 loop();
