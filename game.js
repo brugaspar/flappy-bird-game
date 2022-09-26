@@ -405,7 +405,7 @@ function loop() {
   requestAnimationFrame(loop);
 }
 
-window.addEventListener('click', () => {
+window.addEventListener('keydown', () => {
   activeScreen.click && activeScreen.click();
 });
 
