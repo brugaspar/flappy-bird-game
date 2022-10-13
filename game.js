@@ -1,32 +1,36 @@
-console.log('[FlappyBird]');
+console.log("[FlappyBird]");
 
 let frames = 0;
 
-const hitSound = new Audio();
-hitSound.src = './effects/hit.wav';
+const hit = new Audio();
+hit.src = "./effects/hit.wav";
 
 const sprites = new Image();
-sprites.src = './sprites.png';
+sprites.src = "./sprites.png";
 
-const canvas = document.querySelector('canvas');
-const context = canvas.getContext('2d');
+const canvas = document.querySelector("canvas");
+const context = canvas.getContext("2d");
 
 const getReady = {
   spriteX: 134,
   spriteY: 0,
   width: 174,
   height: 152,
-  positionX: (canvas.width / 2) - 174 / 2,
+  positionX: canvas.width / 2 - 174 / 2,
   positionY: 50,
   draw() {
     context.drawImage(
       sprites,
-      this.spriteX, this.spriteY,
-      this.width, this.height,
-      this.positionX, this.positionY,
-      this.width, this.height
+      this.spriteX,
+      this.spriteY,
+      this.width,
+      this.height,
+      this.positionX,
+      this.positionY,
+      this.width,
+      this.height
     );
-  }
+  },
 };
 
 const gameOver = {
@@ -34,7 +38,7 @@ const gameOver = {
   spriteY: 153,
   width: 226,
   height: 200,
-  positionX: (canvas.width / 2) - 223 / 2,
+  positionX: canvas.width / 2 - 223 / 2,
   positionY: 50,
   draw() {
     if (globals.scoreboard.score > globals.best) {
@@ -45,32 +49,37 @@ const gameOver = {
 
     context.drawImage(
       sprites,
-      this.spriteX, this.spriteY,
-      this.width, this.height,
-      this.positionX, this.positionY,
-      this.width, this.height
+      this.spriteX,
+      this.spriteY,
+      this.width,
+      this.height,
+      this.positionX,
+      this.positionY,
+      this.width,
+      this.height
     );
 
     context.arc(96, 160, 20, 0, 2 * Math.PI);
     context.stroke();
     context.fill();
-    context.fillStyle = '#000';
+    context.fillStyle = "#000";
     context.closePath();
 
     context.beginPath();
     context.font = '24px "VT323"';
-    context.textAlign = 'right';
+    context.textAlign = "right";
     context.fillText(`${globals.scoreboard.score}`, canvas.width - 70, 145);
-    context.fillStyle = '#000';
+    context.fillStyle = "#000";
     context.closePath();
 
     context.beginPath();
     context.font = '24px "VT323"';
-    context.textAlign = 'right';
+    context.textAlign = "right";
     context.fillText(`${globals.best}`, canvas.width - 70, 190);
-    context.fillStyle = '#DAA520';
+    const fillStyle = globals.scoreboard.score <= 20 ? "#d3d3d3" : "#DAA520";
+    context.fillStyle = fillStyle;
     context.closePath();
-  }
+  },
 };
 
 const background = {
@@ -81,25 +90,33 @@ const background = {
   positionX: 0,
   positionY: canvas.height - 204,
   draw() {
-    context.fillStyle = '#70c5ce';
-    context.fillRect(0, 0, canvas.width, canvas.height);;
+    context.fillStyle = "#70c5ce";
+    context.fillRect(0, 0, canvas.width, canvas.height);
 
     context.drawImage(
       sprites,
-      this.spriteX, this.spriteY,
-      this.width, this.height,
-      this.positionX, this.positionY,
-      this.width, this.height
+      this.spriteX,
+      this.spriteY,
+      this.width,
+      this.height,
+      this.positionX,
+      this.positionY,
+      this.width,
+      this.height
     );
 
     context.drawImage(
       sprites,
-      this.spriteX, this.spriteY,
-      this.width, this.height,
-      (this.positionX + this.width), this.positionY,
-      this.width, this.height
+      this.spriteX,
+      this.spriteY,
+      this.width,
+      this.height,
+      this.positionX + this.width,
+      this.positionY,
+      this.width,
+      this.height
     );
-  }
+  },
 };
 
 function makeColision(flappyBird, floor) {
@@ -123,25 +140,33 @@ function createFloor() {
       const repeatIn = this.width / 2;
       const movement = this.positionX - movementSize;
 
-      this.positionX = movement % repeatIn
+      this.positionX = movement % repeatIn;
     },
     draw() {
       context.drawImage(
         sprites,
-        this.spriteX, this.spriteY,
-        this.width, this.height,
-        this.positionX, this.positionY,
-        this.width, this.height
+        this.spriteX,
+        this.spriteY,
+        this.width,
+        this.height,
+        this.positionX,
+        this.positionY,
+        this.width,
+        this.height
       );
 
       context.drawImage(
         sprites,
-        this.spriteX, this.spriteY,
-        this.width, this.height,
-        (this.positionX + this.width), this.positionY,
-        this.width, this.height
+        this.spriteX,
+        this.spriteY,
+        this.width,
+        this.height,
+        this.positionX + this.width,
+        this.positionY,
+        this.width,
+        this.height
       );
-    }
+    },
   };
 
   return floor;
@@ -153,16 +178,16 @@ function createPipes() {
     height: 400,
     floor: {
       spriteX: 0,
-      spriteY: 169
+      spriteY: 169,
     },
     sky: {
       spriteX: 52,
-      spriteY: 169
+      spriteY: 169,
     },
     space: 80,
     pairs: [],
     draw() {
-      this.pairs.forEach(pair => {
+      this.pairs.forEach((pair) => {
         const randomY = pair.y;
 
         const spaceBetween = 90;
@@ -172,10 +197,14 @@ function createPipes() {
 
         context.drawImage(
           sprites,
-          this.sky.spriteX, this.sky.spriteY,
-          this.width, this.height,
-          skyPipesX, skyPipesY,
-          this.width, this.height
+          this.sky.spriteX,
+          this.sky.spriteY,
+          this.width,
+          this.height,
+          skyPipesX,
+          skyPipesY,
+          this.width,
+          this.height
         );
 
         const floorPipesX = pair.x;
@@ -183,20 +212,24 @@ function createPipes() {
 
         pair.skyPipe = {
           x: skyPipesX,
-          y: this.height + skyPipesY
+          y: this.height + skyPipesY,
         };
 
         pair.floorPipe = {
           x: floorPipesX,
-          y: floorPipesY
+          y: floorPipesY,
         };
 
         context.drawImage(
           sprites,
-          this.floor.spriteX, this.floor.spriteY,
-          this.width, this.height,
-          floorPipesX, floorPipesY,
-          this.width, this.height
+          this.floor.spriteX,
+          this.floor.spriteY,
+          this.width,
+          this.height,
+          floorPipesX,
+          floorPipesY,
+          this.width,
+          this.height
         );
       });
     },
@@ -206,15 +239,15 @@ function createPipes() {
       if (reached100Frames) {
         this.pairs.push({
           x: canvas.width,
-          y: -150 * (Math.random() + 1)
+          y: -150 * (Math.random() + 1),
         });
       }
 
-      this.pairs.forEach(pair => {
+      this.pairs.forEach((pair) => {
         pair.x -= 2;
 
         if (this.hasColisionWithFlappyBird(pair)) {
-          hitSound.play();
+          hit.play();
 
           changeToScreen(Screens.GAME_OVER);
         }
@@ -226,9 +259,13 @@ function createPipes() {
     },
     hasColisionWithFlappyBird(pair) {
       const flappyBirdHead = globals.flappyBird.positionY;
-      const flappyBirdFoot = globals.flappyBird.positionY + globals.flappyBird.height;
+      const flappyBirdFoot =
+        globals.flappyBird.positionY + globals.flappyBird.height;
 
-      if ((globals.flappyBird.positionX + globals.flappyBird.width - 5) >= pair.x) {
+      if (
+        globals.flappyBird.positionX + globals.flappyBird.width - 5 >=
+        pair.x
+      ) {
         if (flappyBirdHead <= pair.skyPipe.y) {
           return true;
         }
@@ -239,7 +276,7 @@ function createPipes() {
       }
 
       return false;
-    }
+    },
   };
 
   return pipes;
@@ -260,7 +297,7 @@ function createFlappyBird() {
       { spriteX: 0, spriteY: 0 },
       { spriteX: 0, spriteY: 26 },
       { spriteX: 0, spriteY: 52 },
-      { spriteX: 0, spriteY: 26 }
+      { spriteX: 0, spriteY: 26 },
     ],
     atualFrame: 0,
     updateAtualFrame() {
@@ -280,7 +317,7 @@ function createFlappyBird() {
     },
     update() {
       if (makeColision(globals.flappyBird, globals.floor)) {
-        hitSound.play();
+        hit.play();
 
         changeToScreen(Screens.GAME_OVER);
 
@@ -297,12 +334,16 @@ function createFlappyBird() {
 
       context.drawImage(
         sprites,
-        spriteX, spriteY,
-        this.width, this.height,
-        this.positionX, this.positionY,
-        this.width, this.height
+        spriteX,
+        spriteY,
+        this.width,
+        this.height,
+        this.positionX,
+        this.positionY,
+        this.width,
+        this.height
       );
-    }
+    },
   };
 
   return flappyBird;
@@ -313,8 +354,8 @@ function createScoreboard() {
     score: 0,
     draw() {
       context.font = '35px "VT323"';
-      context.textAlign = 'right';
-      context.fillStyle = '#fff';
+      context.textAlign = "right";
+      context.fillStyle = "#fff";
       context.fillText(`Placar: ${this.score}`, canvas.width - 15, 35);
     },
     update() {
@@ -324,7 +365,7 @@ function createScoreboard() {
       if (reachedInterval) {
         this.score += 1;
       }
-    }
+    },
   };
 
   return scoreboard;
@@ -333,7 +374,7 @@ function createScoreboard() {
 let activeScreen = {};
 
 const globals = {
-  best: 0
+  best: 0,
 };
 
 function changeToScreen(newScreen) {
@@ -360,8 +401,8 @@ const Screens = {
     },
     update() {
       globals.floor.update();
-    }
-  }
+    },
+  },
 };
 
 Screens.GAME = {
@@ -383,7 +424,7 @@ Screens.GAME = {
     globals.floor.update();
     globals.flappyBird.update();
     globals.scoreboard.update();
-  }
+  },
 };
 
 Screens.GAME_OVER = {
@@ -393,8 +434,8 @@ Screens.GAME_OVER = {
   update() {},
   click() {
     changeToScreen(Screens.MAIN);
-  }
-}
+  },
+};
 
 function loop() {
   activeScreen.draw();
@@ -405,7 +446,7 @@ function loop() {
   requestAnimationFrame(loop);
 }
 
-window.addEventListener('keydown', () => {
+window.addEventListener("keydown", () => {
   activeScreen.click && activeScreen.click();
 });
 
